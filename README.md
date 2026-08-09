@@ -118,7 +118,7 @@ src/
 
 Antes de executar o projeto, tenha instalado:
 
-* Python 3.11+
+* Python 3.13+
 * Git
 * uv
 * acesso a um projeto Supabase
