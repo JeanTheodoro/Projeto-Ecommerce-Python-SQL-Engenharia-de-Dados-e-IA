@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-commerce · Engenharia de Dados</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{
+--bg:#06090f;--panel:#0d141f;--panel2:#111c29;--cyan:#00e5ff;--cyan2:#70f3ff;
+--slate:#8b9bb0;--light:#e9f2fb;--line:rgba(112,243,255,.12);
+--bronze:#cd7f32;--silver:#c0c0c0;--gold:#ffd166
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--light);font-family:'Space Grotesk',sans-serif}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(0,229,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.025) 1px,transparent 1px);background-size:48px 48px}
+.container{width:min(1180px,88vw);margin:auto;padding:90px 0;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+section{min-height:100vh;border-bottom:1px solid rgba(255,255,255,.05)}
+.hero-eyebrow,.sec-label{font-family:'JetBrains Mono';font-size:.75rem;color:var(--cyan);letter-spacing:.16em;text-transform:uppercase}
+h1{font-size:clamp(4rem,9vw,8rem);line-height:.9;margin:18px 0 28px;letter-spacing:-.05em}
+h1 .accent,h2 .accent{color:var(--cyan)}
+h2{font-size:clamp(2.4rem,5vw,4.4rem);line-height:1;margin:14px 0 22px;letter-spacing:-.04em}
+.hero-sub,.sec-desc{max-width:800px;color:var(--slate);font-size:1.15rem;line-height:1.7}
+.badges{display:flex;gap:9px;flex-wrap:wrap;margin-top:28px}.badge{border:1px solid var(--line);background:rgba(0,229,255,.035);padding:9px 13px;border-radius:5px;color:#b7c7d8;font:12px 'JetBrains Mono'}
+.divider{height:1px;background:linear-gradient(90deg,var(--cyan),transparent);margin:25px 0 38px;opacity:.35}
+.pipeline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin:15px 0 35px}
+.pipe-node{width:170px;min-height:135px;padding:20px;background:var(--panel);border:1px solid var(--line);border-radius:9px;text-align:center}
+.pipe-icon{font-size:30px;margin-bottom:10px}.pipe-name{font-weight:700;font-size:1.15rem}.pipe-desc{color:var(--slate);font-size:.8rem;line-height:1.45;margin-top:7px}.pipe-arrow{color:var(--cyan)}
+.src{border-top:2px solid #61dafb}.raw{border-top:2px solid #4e8cff}.brnz{border-top:2px solid var(--bronze)}.slvr{border-top:2px solid var(--silver)}.gold{border-top:2px solid var(--gold)}
+.tools,.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.tool,.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px}.tool-title,.card-title{font-weight:700}.tool-role,.card-text{font-size:.8rem;color:var(--slate);margin-top:6px;line-height:1.55}
+.arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:25px}.flow-vertical{display:flex;flex-direction:column;gap:10px}
+.layer{padding:22px;background:var(--panel);border-left:3px solid var(--cyan);border-radius:5px}.layer b{font-size:1.1rem}.layer span{display:block;color:var(--slate);font-size:.82rem;margin-top:6px}
+.table{width:100%;border-collapse:collapse;font-size:.86rem}.table th,.table td{text-align:left;padding:13px;border-bottom:1px solid var(--line)}.table th{color:var(--cyan);font-family:'JetBrains Mono';font-size:.72rem;text-transform:uppercase}
+.steps{display:grid;gap:12px}.step{display:grid;grid-template-columns:38px 220px 1fr;gap:18px;align-items:center;padding:17px 0;border-bottom:1px solid rgba(255,255,255,.06)}.step-n{color:var(--cyan);font:700 13px 'JetBrains Mono'}.step-title{font-weight:700}.step-body{color:var(--slate);font-size:.85rem;line-height:1.5}
+.footer{text-align:center;min-height:55vh}.footer-logo{font-size:3rem;font-weight:700}.footer-logo span{color:var(--cyan)}.footer-note{color:var(--slate);margin-top:15px}
+.nav{position:fixed;right:28px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:9px;z-index:20}.dot{width:8px;height:8px;border-radius:50%;background:#314052;cursor:pointer}.dot.active{background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+@media(max-width:800px){.tools,.grid,.arch-grid{grid-template-columns:1fr}.step{grid-template-columns:30px 1fr}.step-body{grid-column:2}.container{width:82vw}.pipe-node{width:135px}.nav{display:none}}
+
+
+.architecture-diagram{
+  width:100%;
+  background:#090f18;
+  border:1px solid rgba(112,243,255,.12);
+  border-radius:10px;
+  padding:30px 28px;
+}
+.diagram-stage{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.diagram-node,.analytics-node{
+  width:170px;
+  min-height:105px;
+  padding:17px;
+  background:#111c29;
+  border:1px solid rgba(112,243,255,.15);
+  border-radius:8px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.diagram-node.source{border-top:2px solid #61dafb}
+.diagram-node.raw{border-top:2px solid #4e8cff}
+.diagram-node.parquet{border-top:2px solid #00e5ff}
+.diagram-node strong,.analytics-node strong{font-size:1rem}
+.diagram-node small,.analytics-node small{color:#8b9bb0;font-size:.72rem;margin-top:6px}
+.diagram-icon{font-size:25px;margin-bottom:7px}
+.diagram-arrow,.diagram-down,.layer-arrow{color:#00e5ff;font-size:25px;font-weight:bold}
+.diagram-down{text-align:center;margin:8px 0}
+.lake-node{
+  max-width:500px;
+  margin:auto;
+  padding:20px 28px;
+  background:#111c29;
+  border:1px solid rgba(0,229,255,.25);
+  border-top:3px solid #00e5ff;
+  border-radius:9px;
+  text-align:center;
+}
+.lake-main{display:flex;align-items:center;justify-content:center;gap:13px}
+.lake-main .diagram-icon{margin:0}
+.lake-main strong{font-size:1.25rem;color:#70f3ff}
+.lake-main span{font:12px 'JetBrains Mono';color:#8b9bb0}
+.lake-detail{color:#8b9bb0;font-size:.78rem;margin-top:9px}
+.warehouse-node{
+  max-width:800px;
+  margin:auto;
+  padding:22px;
+  background:#0d141f;
+  border:1px solid rgba(112,243,255,.16);
+  border-radius:9px;
+}
+.warehouse-title{display:flex;align-items:center;justify-content:center;gap:13px;text-align:left;margin-bottom:18px}
+.warehouse-title .diagram-icon{margin:0}
+.warehouse-title strong{font-size:1.2rem}
+.warehouse-title small{display:block;color:#8b9bb0;font-size:.75rem;margin-top:4px}
+.warehouse-layers{display:flex;align-items:center;justify-content:center;gap:10px}
+.warehouse-layer{
+  flex:1;
+  max-width:190px;
+  padding:16px 10px;
+  border-radius:7px;
+  text-align:center;
+  background:#111c29;
+  border:1px solid rgba(255,255,255,.08);
+}
+.warehouse-layer b{display:block;font-size:1rem}
+.warehouse-layer span{display:block;color:#8b9bb0;font-size:.7rem;margin-top:5px}
+.warehouse-layer.bronze{border-top:2px solid #cd7f32}
+.warehouse-layer.silver{border-top:2px solid #c0c0c0}
+.warehouse-layer.gold{border-top:2px solid #ffd166}
+.layer-arrow{font-size:20px}
+.analytics-node{margin:18px auto 0;border-top:2px solid #ffd166}
+@media(max-width:800px){
+  .diagram-arrow{transform:rotate(90deg)}
+  .warehouse-layers{flex-direction:column}
+  .warehouse-layer{width:100%;max-width:none}
+  .layer-arrow{transform:rotate(90deg)}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav"></nav>
+
+<section id="hero">
+<div class="container">
+<div class="hero-eyebrow">Projeto de Engenharia de Dados</div>
+<h1>E-commerce<br><span class="accent">Data Platform</span></h1>
+<p class="hero-sub">Pipeline de dados — da entrada das planilhas até um Data Warehouse organizado em RAW, BRONZE, SILVER e GOLD.</p>
+<div class="badges">
+<span class="badge">Python · Pandas</span><span class="badge">Parquet</span><span class="badge">Supabase Storage · S3</span><span class="badge">Data Warehouse</span><span class="badge">dbt</span>
+</div>
+</div>
+</section>
+
+<section id="arquitetura">
+<div class="container">
+<div class="sec-label">// arquitetura</div>
+<h2>Pipeline de <span class="accent">dados</span></h2>
+<p class="sec-desc">Os dados percorrem um fluxo controlado: origem → armazenamento → persistência → transformação → consumo analítico.</p>
+<div class="divider"></div>
+<div class="pipeline">
+<div class="pipe-node src"><div class="pipe-icon">📄</div><div class="pipe-name">Planilhas</div><div class="pipe-desc">CSV<br>dados de origem</div></div>
+<div class="pipe-arrow">→</div>
+<div class="pipe-node raw"><div class="pipe-icon">📦</div><div class="pipe-name">RAW</div><div class="pipe-desc">dados recebidos<br>sem transformação</div></div>
+<div class="pipe-arrow">→</div>
+<div class="pipe-node raw"><div class="pipe-icon">▣</div><div class="pipe-name">Parquet</div><div class="pipe-desc">formato colunar<br>para processamento</div></div>
+<div class="pipe-arrow">→</div>
+<div class="pipe-node raw"><div class="pipe-icon">🗄</div><div class="pipe-name">Banco</div><div class="pipe-desc">registro e<br>persistência</div></div>
+<div class="pipe-arrow">→</div>
+<div class="pipe-node raw"><div class="pipe-icon">☁</div><div class="pipe-name">Data Lake</div><div class="pipe-desc">AWS S3<br>arquivos Parquet</div></div>
+<div class="pipe-arrow">→</div>
+<div class="pipe-node raw"><div class="pipe-icon">❄</div><div class="pipe-name">Warehouse</div><div class="pipe-desc">ambiente<br>analítico</div></div>
+</div>
+<div class="tools">
+<div class="tool"><div class="tool-title">Python + Pandas</div><div class="tool-role">Ingestão e conversão CSV → Parquet</div></div>
+<div class="tool"><div class="tool-title">Supabase Storage</div><div class="tool-role">Armazenamento dos arquivos via API S3</div></div>
+<div class="tool"><div class="tool-title">dbt</div><div class="tool-role">Transformações e organização das camadas</div></div>
+</div>
+</div>
+</section>
+
+<section id="ingestao">
+<div class="container">
+<div class="sec-label">// ingestão</div>
+<h2>Da planilha ao <span class="accent">Parquet</span></h2>
+<p class="sec-desc">Os arquivos de origem são carregados e convertidos para um formato adequado ao processamento analítico.</p>
+<div class="divider"></div>
+<div class="arch-grid">
+<div class="flow-vertical">
+<div class="layer"><b>01 · Planilhas / CSV</b><span>Clientes, produtos, vendas e preços.</span></div>
+<div class="layer"><b>02 · Python + Pandas</b><span>Leitura dos arquivos e conversão.</span></div>
+<div class="layer"><b>03 · Parquet</b><span>Mesmo nome do arquivo de origem, com extensão .parquet.</span></div>
+</div>
+<div class="card">
+<div class="card-title">Por que Parquet?</div>
+<div class="card-text">Formato colunar adequado para dados analíticos e processamento eficiente. Os arquivos também podem ser armazenados no Data Lake.</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="persistencia">
+<div class="container">
+<div class="sec-label">// persistência</div>
+<h2>Registro dos <span class="accent">dados</span></h2>
+<p class="sec-desc">O pipeline mantém os arquivos e os registros persistidos, permitindo rastreabilidade e reprocessamento.</p>
+<div class="divider"></div>
+<table class="table">
+<thead><tr><th>Etapa</th><th>Responsabilidade</th><th>Resultado</th></tr></thead>
+<tbody>
+<tr><td>Raw</td><td>Preservar a origem</td><td>Dados recebidos</td></tr>
+<tr><td>Parquet</td><td>Armazenar em formato analítico</td><td>Arquivos .parquet</td></tr>
+<tr><td>Banco de Dados</td><td>Manter registros estruturados</td><td>Dados persistidos</td></tr>
+<tr><td>Warehouse</td><td>Disponibilizar ambiente analítico</td><td>Dados prontos para transformação</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="warehouse">
+<div class="container">
+<div class="sec-label">// data warehouse</div>
+<h2>Construção do <span class="accent">Warehouse</span></h2>
+<p class="sec-desc">A partir dos dados persistidos, o Warehouse organiza o processo de transformação em camadas progressivas.</p>
+<div class="divider"></div>
+<div class="pipeline">
+<div class="pipe-node raw"><div class="pipe-icon">📦</div><div class="pipe-name">RAW</div><div class="pipe-desc">origem preservada</div></div>
+<div class="pipe-arrow">→</div>
+<div class="pipe-node brnz"><div class="pipe-icon">🔶</div><div class="pipe-name">BRONZE</div><div class="pipe-desc">limpeza e<br>padronização</div></div>
+<div class="pipe-arrow">→</div>
+<div class="pipe-node slvr"><div class="pipe-icon">⬜</div><div class="pipe-name">SILVER</div><div class="pipe-desc">regras de negócio<br>e enriquecimento</div></div>
+<div class="pipe-arrow">→</div>
+<div class="pipe-node gold"><div class="pipe-icon">🏆</div><div class="pipe-name">GOLD</div><div class="pipe-desc">modelos analíticos<br>e agregações</div></div>
+</div>
+</div>
+</section>
+
+<section id="camadas">
+<div class="container">
+<div class="sec-label">// transformações</div>
+<h2>Camadas do <span class="accent">Warehouse</span></h2>
+<p class="sec-desc">Cada camada possui uma responsabilidade clara dentro do processo de transformação.</p>
+<div class="divider"></div>
+<div class="grid">
+<div class="card" style="border-top:2px solid var(--bronze)"><div class="card-title">🔶 BRONZE</div><div class="card-text">Limpeza e padronização. Estrutura os dados mantendo proximidade com a origem.</div></div>
+<div class="card" style="border-top:2px solid var(--silver)"><div class="card-title">⬜ SILVER</div><div class="card-text">Aplica regras de negócio, relacionamentos e enriquecimento dos dados.</div></div>
+<div class="card" style="border-top:2px solid var(--gold)"><div class="card-title">🏆 GOLD</div><div class="card-text">Modelos analíticos, agregações, métricas e dados preparados para consumo.</div></div>
+</div>
+</div>
+</section>
+
+<section id="execucao">
+<div class="container">
+<div class="sec-label">// fluxo</div>
+<h2>Do dado bruto ao <span class="accent">Analytics</span></h2>
+<p class="sec-desc">Fluxo resumido de execução do projeto.</p>
+<div class="divider"></div>
+<div class="steps">
+<div class="step"><div class="step-n">01</div><div class="step-title">Receber dados</div><div class="step-body">Planilhas e arquivos CSV são colocados na área de entrada.</div></div>
+<div class="step"><div class="step-n">02</div><div class="step-title">Converter</div><div class="step-body">Python e Pandas convertem os CSVs para Parquet.</div></div>
+<div class="step"><div class="step-n">03</div><div class="step-title">Persistir</div><div class="step-body">Arquivos e registros são armazenados para manter a origem e o histórico.</div></div>
+<div class="step"><div class="step-n">04</div><div class="step-title">Transformar</div><div class="step-body">O dbt organiza as transformações no Warehouse: Bronze → Silver → Gold.</div></div>
+<div class="step"><div class="step-n">05</div><div class="step-title">Consumir</div><div class="step-body">A camada Gold disponibiliza dados preparados para análises e indicadores.</div></div>
+</div>
+</div>
+</section>
+
+
+<section id="fluxo">
+<div class="container">
+<div class="sec-label">// fluxo arquitetural</div>
+<h2>Do CSV ao <span class="accent">Analytics</span></h2>
+<p class="sec-desc">Fluxo completo da ingestão dos arquivos até a camada Gold do Data Warehouse.</p>
+<div class="divider"></div>
+
+<div class="architecture-diagram">
+  <div class="diagram-stage">
+    <div class="diagram-node source">
+      <div class="diagram-icon">📄</div>
+      <strong>Planilhas / CSV</strong>
+      <small>Dados de origem</small>
+    </div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node raw">
+      <div class="diagram-icon">📦</div>
+      <strong>RAW</strong>
+      <small>Dados recebidos</small>
+    </div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node parquet">
+      <div class="diagram-icon">▣</div>
+      <strong>Parquet</strong>
+      <small>Python + Pandas</small>
+    </div>
+  </div>
+
+  <div class="diagram-down">↓</div>
+
+  <div class="lake-node">
+    <div class="lake-main">
+      <div class="diagram-icon">☁</div>
+      <strong>DATA LAKE</strong>
+      <span>AWS S3</span>
+    </div>
+    <div class="lake-detail">Arquivos Parquet armazenados no Data Lake</div>
+  </div>
+
+  <div class="diagram-down">↓</div>
+
+  <div class="warehouse-node">
+    <div class="warehouse-title">
+      <div class="diagram-icon">❄</div>
+      <div>
+        <strong>DATA WAREHOUSE</strong>
+        <small>Ambiente analítico</small>
+      </div>
+    </div>
+
+    <div class="warehouse-layers">
+      <div class="warehouse-layer bronze">
+        <b>BRONZE</b>
+        <span>Estruturação</span>
+      </div>
+      <div class="layer-arrow">→</div>
+      <div class="warehouse-layer silver">
+        <b>SILVER</b>
+        <span>Tratamento</span>
+      </div>
+      <div class="layer-arrow">→</div>
+      <div class="warehouse-layer gold">
+        <b>GOLD</b>
+        <span>Analytics</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="diagram-down">↓</div>
+
+  <div class="analytics-node">
+    <div class="diagram-icon">📊</div>
+    <strong>BI / ANALYTICS</strong>
+    <small>KPIs · Relatórios · Decisões</small>
+  </div>
+</div></div>
+
+<div class="flow-caption">
+<span>INGESTÃO</span>
+<span>→</span>
+<span>DATA LAKE</span>
+<span>→</span>
+<span>DATA WAREHOUSE</span>
+<span>→</span>
+<span>ANALYTICS</span>
+</div>
+</div>
+</section>
+
+<section id="footer">
+<div class="container" style="text-align:center">
+<div class="footer-logo">E-commerce <span>Data Platform</span></div>
+<div class="footer-note">Projeto de Engenharia de Dados · Python · Parquet · Supabase · Data Warehouse · dbt</div>
+</div>
+</section>
+
+<script>
+const ids=['hero','arquitetura','ingestao','persistencia','warehouse','fluxo','camadas','execucao','footer'];
+const nav=document.getElementById('nav');
+ids.forEach((id,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.title=id;d.onclick=()=>document.getElementById(id).scrollIntoView({behavior:'smooth'});nav.appendChild(d)});
+const dots=[...nav.children];
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){let i=ids.indexOf(e.target.id);dots.forEach(d=>d.classList.remove('active'));if(i>=0)dots[i].classList.add('active')}}),{threshold:.5});
+ids.forEach(id=>obs.observe(document.getElementById(id)));
+</script>
+
+
+
+</body>
+</html>
