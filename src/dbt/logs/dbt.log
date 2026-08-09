@@ -1,0 +1,15 @@
+[0m19:06:18.706540 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002B855385550>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002B857ADBED0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002B857ADB750>]}
+
+
+============================== 19:06:18.710748 | a716db66-eb5a-4dff-95fe-f98d21d2ae8a ==============================
+[0m19:06:18.710748 [info ] [MainThread]: Running with dbt=1.12.0
+[0m19:06:18.711402 [debug] [MainThread]: running dbt with arguments {'maximum_seed_size_mib': '1', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'version_check': 'True', 'printer_width': '80', 'write_json': 'True', 'empty': 'None', 'log_cache_events': 'False', 'introspect': 'True', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'profiles_dir': 'C:\\Users\\admin\\.dbt', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'use_colors': 'True', 'hints_enabled': 'True', 'invocation_command': 'dbt init', 'use_experimental_parser': 'False', 'indirect_selection': 'eager', 'log_path': 'logs'}
+[0m19:06:25.636061 [debug] [MainThread]: Starter project path: C:\estudo\jornada_de_dados\Projeto_ecomerce\.venv\Lib\site-packages\dbt\include\starter_project
+[0m19:06:25.649043 [info ] [MainThread]: Setting up your profile.
+[0m19:06:25.654383 [error] [MainThread]: [[31mERROR[0m]: Encountered an error:
+Runtime Error
+  No adapters available. Learn how to install an adapter by going to https://docs.getdbt.com/docs/connect-adapters#install-using-the-cli
+[0m19:06:25.655437 [debug] [MainThread]: Command `dbt init` failed at 19:06:25.655324 after 7.13 seconds
+[0m19:06:25.655778 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002B857B95810>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002B857BA6330>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002B857B5F020>]}
+[0m19:06:25.656130 [debug] [MainThread]: Flushing usage events
+[0m19:06:26.564072 [debug] [MainThread]: An error was encountered while trying to flush usage events

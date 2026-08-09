@@ -1,0 +1,47 @@
+name: 'ecommerce'
+version: '1.0.0'
+config-version: 2
+
+profile: 'ecommerce'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  ecommerce:
+
+    bronze:
+      +materialized: table
+      +schema: warehouse
+      +tags: ["bronze", "raw"]
+      +meta:
+        modeling_layer: bronze
+
+    silver:
+      +materialized: table
+      +schema: warehouse
+      +tags: ["silver", "cleaned"]
+      +meta:
+        modeling_layer: silver
+
+    gold:
+      +materialized: table
+      +schema: warehouse
+      +tags: ["gold", "kpi", "metrics"]
+      +meta:
+        modeling_layer: gold
+
+vars:
+  segmentacao_vip_threshold: 10000
+  segmentacao_top_tier_threshold: 5000
+  
